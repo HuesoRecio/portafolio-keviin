@@ -1,14 +1,5 @@
-import { GoTrue } from 'https://cdn.jsdelivr.net/npm/gotrue-js@2.0.0/+esm';
-
-const auth = new GoTrue({
-  APIUrl: `${window.location.origin}/.netlify/identity`,
-  setCookie: true,
-});
-
 let currentContent = window.mergeContent(null);
-let authMode = 'login'; // 'login' | 'signup' | 'recover'
 
-// Elementos del DOM
 const noticeEl = document.getElementById('notice');
 const authViewEl = document.getElementById('auth-view');
 const authTitleEl = document.getElementById('auth-title');
@@ -27,18 +18,16 @@ const saveStatusEl = document.getElementById('save-status');
 const resetBtnEl = document.getElementById('reset-btn');
 const loadingEl = document.getElementById('loading');
 
+let authMode = 'login';
+
 function showNotice(msg, isError = false) {
   noticeEl.textContent = msg;
   noticeEl.className = `notice ${isError ? 'error' : ''}`;
   noticeEl.classList.remove('hidden');
 }
 
-function hideNotice() {
-  noticeEl.classList.add('hidden');
-}
-
 function updateAuthUI() {
-  hideNotice();
+  noticeEl.classList.add('hidden');
   if (authMode === 'login') {
     authTitleEl.innerHTML = '<i class="fas fa-lock"></i> Iniciar sesión';
     authHelpEl.textContent = 'Ingresá con tu cuenta de administrador.';
@@ -47,7 +36,7 @@ function updateAuthUI() {
     authPasswordEl.required = true;
   } else if (authMode === 'signup') {
     authTitleEl.innerHTML = '<i class="fas fa-user-plus"></i> Crear cuenta';
-    authHelpEl.textContent = 'Creá tu cuenta de administrador con tu correo de Netlify.';
+    authHelpEl.textContent = 'Creá tu cuenta de administrador.';
     authSubmitEl.textContent = 'Registrarse';
     passwordFieldEl.classList.remove('hidden');
     authPasswordEl.required = true;
@@ -83,7 +72,6 @@ async function loadData() {
 }
 
 function renderEditor() {
-  // Rellenar campos simples
   editorEl.querySelectorAll('[data-path]').forEach((input) => {
     const path = input.dataset.path.split('.');
     let val = currentContent;
@@ -91,21 +79,21 @@ function renderEditor() {
     input.value = val || '';
   });
 
-  // Editor de Tarjetas
   cardsEditorEl.innerHTML = '';
-  Object.keys(currentContent.cards).forEach((key) => {
-    const card = currentContent.cards[key];
-    const div = document.createElement('div');
-    div.className = 'card-editor';
-    div.innerHTML = `
-      <div class="card-editor-head"><i class="fas fa-th"></i> Tarjeta: ${key}</div>
-      <label class="field"><span>Título</span><input data-card-key="${key}" data-card-field="title" value="${card.title || ''}"></label>
-      <label class="field"><span>Descripción</span><textarea data-card-key="${key}" data-card-field="desc" rows="2">${card.desc || ''}</textarea></label>
-    `;
-    cardsEditorEl.appendChild(div);
-  });
+  if (currentContent.cards) {
+    Object.keys(currentContent.cards).forEach((key) => {
+      const card = currentContent.cards[key];
+      const div = document.createElement('div');
+      div.className = 'card-editor';
+      div.innerHTML = `
+        <div class="card-editor-head"><i class="fas fa-th"></i> Tarjeta: ${key}</div>
+        <label class="field"><span>Título</span><input data-card-key="${key}" data-card-field="title" value="${card.title || ''}"></label>
+        <label class="field"><span>Descripción</span><textarea data-card-key="${key}" data-card-field="desc" rows="2">${card.desc || ''}</textarea></label>
+      `;
+      cardsEditorEl.appendChild(div);
+    });
+  }
 
-  // Editor de Listas (About, Purpose, Experience, Interests)
   document.querySelectorAll('.list-editor').forEach((container) => {
     const listKey = container.dataset.list;
     const isMultiline = container.hasAttribute('data-multiline');
@@ -125,9 +113,8 @@ function renderEditor() {
           }
           <button type="button" class="icon-btn danger" data-remove="${idx}"><i class="fas fa-trash"></i></button>
         `;
-        
-        const inputEl = row.querySelector('input, textarea');
-        inputEl.addEventListener('input', (e) => {
+
+        row.querySelector('input, textarea').addEventListener('input', (e) => {
           items[idx] = e.target.value;
         });
 
@@ -158,7 +145,6 @@ function renderEditor() {
   logoutBtnEl.classList.remove('hidden');
 }
 
-// Eventos de Autenticación
 authLinksEl.addEventListener('click', (e) => {
   const mode = e.target.dataset.authMode;
   if (mode) {
@@ -167,39 +153,27 @@ authLinksEl.addEventListener('click', (e) => {
   }
 });
 
-authFormEl.addEventListener('submit', async (e) => {
+authFormEl.addEventListener('submit', (e) => {
   e.preventDefault();
-  const email = authEmailEl.value.trim();
-  const password = authPasswordEl.value;
-
-  try {
-    if (authMode === 'login') {
-      await auth.login(email, password, true);
-      checkUser();
-    } else if (authMode === 'signup') {
-      await auth.signup(email, password);
-      showNotice('Cuenta creada. Revisá tu correo para confirmarla.');
+  if (window.netlifyIdentity) {
+    if (authMode === 'login' || authMode === 'signup') {
+      window.netlifyIdentity.open(authMode);
     } else if (authMode === 'recover') {
-      await auth.requestPasswordRecovery(email);
-      showNotice('Te enviamos un correo para restablecer tu contraseña.');
+      window.netlifyIdentity.open('login');
     }
-  } catch (err) {
-    showNotice(err.message || 'Error en la solicitud', true);
   }
 });
 
-logoutBtnEl.addEventListener('click', async () => {
-  const user = auth.currentUser();
-  if (user) await user.logout();
-  location.reload();
+logoutBtnEl.addEventListener('click', () => {
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.logout();
+  }
 });
 
-// Guardar datos
 editorEl.addEventListener('submit', async (e) => {
   e.preventDefault();
   saveStatusEl.textContent = 'Guardando...';
 
-  // Recolectar datos del editor
   editorEl.querySelectorAll('[data-path]').forEach((input) => {
     const path = input.dataset.path.split('.');
     if (path.length === 2) {
@@ -215,8 +189,8 @@ editorEl.addEventListener('submit', async (e) => {
     currentContent.cards[key][field] = input.value;
   });
 
-  const user = auth.currentUser();
-  const token = user ? await user.jwt() : null;
+  const user = window.netlifyIdentity ? window.netlifyIdentity.currentUser() : null;
+  const token = user ? await user.jwt() : '';
 
   try {
     const res = await fetch('/api/content', {
@@ -247,15 +221,24 @@ resetBtnEl.addEventListener('click', () => {
   }
 });
 
-async function checkUser() {
-  const user = auth.currentUser();
-  if (user) {
-    sessionInfoEl.textContent = `Sesión iniciada como: ${user.email}`;
-    await loadData();
-  } else {
-    authViewEl.classList.remove('hidden');
-    updateAuthUI();
-  }
-}
+if (window.netlifyIdentity) {
+  window.netlifyIdentity.on('init', (user) => {
+    if (user) {
+      sessionInfoEl.textContent = `Sesión iniciada como: ${user.email}`;
+      loadData();
+    } else {
+      authViewEl.classList.remove('hidden');
+      updateAuthUI();
+    }
+  });
 
-checkUser();
+  window.netlifyIdentity.on('login', (user) => {
+    window.netlifyIdentity.close();
+    sessionInfoEl.textContent = `Sesión iniciada como: ${user.email}`;
+    loadData();
+  });
+
+  window.netlifyIdentity.on('logout', () => {
+    location.reload();
+  });
+}

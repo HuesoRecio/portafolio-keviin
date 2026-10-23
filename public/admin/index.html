@@ -28,7 +28,7 @@
     <div class="notice hidden" id="notice"></div>
 
     <!-- Acceso -->
-    <section class="panel auth-panel hidden" id="auth-view">
+    <section class="panel auth-panel" id="auth-view">
       <h2 class="panel-title" id="auth-title"><i class="fas fa-lock"></i> Iniciar sesión</h2>
       <p class="panel-help" id="auth-help">Ingresá con tu cuenta de administrador.</p>
       <form id="auth-form" class="form-grid">
@@ -76,19 +76,17 @@
 
       <section class="panel">
         <h2 class="panel-title"><i class="fas fa-user-circle"></i> Sobre mí</h2>
-        <p class="panel-help">Cada párrafo es un bloque de texto. Escribí <code>**texto**</code> para ponerlo en negrita.</p>
+        <p class="panel-help">Cada párrafo es un bloque de texto.</p>
         <div class="list-editor" data-list="about" data-multiline data-add-label="Agregar párrafo"></div>
       </section>
 
       <section class="panel">
         <h2 class="panel-title"><i class="fas fa-bullseye"></i> Propósito</h2>
-        <p class="panel-help">Escribí <code>**texto**</code> para ponerlo en negrita.</p>
         <div class="list-editor" data-list="purpose" data-multiline data-add-label="Agregar párrafo"></div>
       </section>
 
       <section class="panel">
         <h2 class="panel-title"><i class="fas fa-search-plus"></i> Experiencia SS</h2>
-        <p class="panel-help">Servidores y rangos. Usá las flechas para cambiar el orden.</p>
         <div class="list-editor" data-list="experience" data-add-label="Agregar servidor" data-placeholder="Ej: SS Team MiServidor"></div>
       </section>
 
@@ -118,7 +116,8 @@
     <p class="panel-help hidden" id="loading" style="text-align:center;">Cargando…</p>
   </div>
 
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="/content-defaults.js"></script>
-  <script type="module" src="/admin/admin.js"></script>
+  <script src="/admin/admin.js"></script>
 </body>
 </html>
