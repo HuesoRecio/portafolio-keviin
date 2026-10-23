@@ -1,6 +1,8 @@
 body.admin-body {
   display: block;
   cursor: auto;
+  background: #0a141a;
+  color: #e2e8f0;
 }
 
 .admin-container {
@@ -10,7 +12,7 @@ body.admin-body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-bottom: 90px;
+  padding: 20px 20px 90px 20px;
 }
 
 .hidden {
@@ -147,11 +149,6 @@ body.admin-body {
   border-color: #f87171;
 }
 
-.icon-btn:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-
 .add-btn {
   margin-top: 4px;
 }
@@ -160,10 +157,6 @@ body.admin-body {
   max-width: 420px;
   width: 100%;
   margin: 20px auto 0;
-}
-
-.auth-panel .btn {
-  justify-content: center;
 }
 
 .auth-links {
@@ -204,9 +197,7 @@ body.admin-body {
 
 .save-bar {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 0; right: 0; bottom: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -224,19 +215,9 @@ body.admin-body {
   margin-right: auto;
 }
 
-.save-status.dirty {
-  color: #fbbf24;
-}
-
 @media (max-width: 650px) {
   .form-grid.two,
   .cards-editor {
     grid-template-columns: 1fr;
-  }
-  .save-bar {
-    flex-wrap: wrap;
-  }
-  .save-status {
-    width: 100%;
   }
 }
