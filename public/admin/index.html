@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Panel de administración - Keviin</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+  <div class="admin-container">
+    <header class="header">
+      <div class="brand">
+        <div class="avatar"><i class="fas fa-sliders-h"></i></div>
+        <div>
+          <h1 class="brand-title">Panel de administración</h1>
+          <p class="brand-subtitle" id="session-info">Editá el contenido de tu portafolio</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="/" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> Ver página</a>
+        <button class="btn btn-outline hidden" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Salir</button>
+      </div>
+    </header>
+
+    <div class="notice hidden" id="notice"></div>
+
+    <!-- Acceso -->
+    <section class="panel auth-panel hidden" id="auth-view">
+      <h2 class="panel-title" id="auth-title"><i class="fas fa-lock"></i> Iniciar sesión</h2>
+      <p class="panel-help" id="auth-help">Ingresá con tu cuenta de administrador.</p>
+      <form id="auth-form" class="form-grid">
+        <label class="field" id="email-field">
+          <span>Correo electrónico</span>
+          <input type="email" id="auth-email" autocomplete="email" required>
+        </label>
+        <label class="field" id="password-field">
+          <span>Contraseña</span>
+          <input type="password" id="auth-password" autocomplete="current-password" minlength="6" required>
+        </label>
+        <button type="submit" class="btn btn-primary" id="auth-submit">Entrar</button>
+      </form>
+      <div class="auth-links" id="auth-links">
+        <button type="button" class="link-btn" data-auth-mode="signup">Primera vez: crear cuenta</button>
+        <button type="button" class="link-btn" data-auth-mode="recover">Olvidé mi contraseña</button>
+        <button type="button" class="link-btn hidden" data-auth-mode="login">Volver a iniciar sesión</button>
+      </div>
+    </section>
+
+    <!-- Editor -->
+    <form class="editor hidden" id="editor">
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-id-badge"></i> Encabezado</h2>
+        <div class="form-grid two">
+          <label class="field"><span>Nombre</span><input data-path="brand.name" required></label>
+          <label class="field"><span>Subtítulo</span><input data-path="brand.subtitle"></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-star"></i> Presentación principal</h2>
+        <div class="form-grid">
+          <label class="field"><span>Etiqueta</span><input data-path="hero.badge"></label>
+          <label class="field"><span>Título</span><input data-path="hero.title"></label>
+          <label class="field"><span>Descripción</span><textarea data-path="hero.description" rows="4"></textarea></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-th-large"></i> Tarjetas</h2>
+        <p class="panel-help">El título también se usa en la ventana que se abre al hacer clic.</p>
+        <div class="cards-editor" id="cards-editor"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-user-circle"></i> Sobre mí</h2>
+        <p class="panel-help">Cada párrafo es un bloque de texto. Escribí <code>**texto**</code> para ponerlo en negrita.</p>
+        <div class="list-editor" data-list="about" data-multiline data-add-label="Agregar párrafo"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-bullseye"></i> Propósito</h2>
+        <p class="panel-help">Escribí <code>**texto**</code> para ponerlo en negrita.</p>
+        <div class="list-editor" data-list="purpose" data-multiline data-add-label="Agregar párrafo"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-search-plus"></i> Experiencia SS</h2>
+        <p class="panel-help">Servidores y rangos. Usá las flechas para cambiar el orden.</p>
+        <div class="list-editor" data-list="experience" data-add-label="Agregar servidor" data-placeholder="Ej: SS Team MiServidor"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-gamepad"></i> Intereses</h2>
+        <div class="list-editor" data-list="interests" data-add-label="Agregar interés" data-placeholder="Ej: Bedwars"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title"><i class="fas fa-address-book"></i> Contacto y pie de página</h2>
+        <div class="form-grid two">
+          <label class="field"><span>Correo electrónico</span><input type="email" data-path="contact.email"></label>
+          <label class="field"><span>Invitación de Discord</span><input type="url" data-path="contact.discord" placeholder="https://discord.gg/..."></label>
+        </div>
+        <div class="form-grid" style="margin-top: 14px;">
+          <label class="field"><span>Texto del pie de página</span><input data-path="footer"></label>
+        </div>
+      </section>
+
+      <div class="save-bar">
+        <span class="save-status" id="save-status"></span>
+        <button type="button" class="btn btn-outline" id="reset-btn"><i class="fas fa-undo"></i> Restaurar original</button>
+        <button type="submit" class="btn btn-primary" id="save-btn"><i class="fas fa-save"></i> Guardar cambios</button>
+      </div>
+    </form>
+
+    <p class="panel-help hidden" id="loading" style="text-align:center;">Cargando…</p>
+  </div>
+
+  <script src="/content-defaults.js"></script>
+  <script type="module" src="/admin/admin.js"></script>
+</body>
+</html>

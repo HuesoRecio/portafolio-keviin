@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keviin - Portafolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="avatar" id="brand-avatar">K</div>
+        <div>
+          <h1 class="brand-title" id="brand-name">Keviin</h1>
+          <p class="brand-subtitle" id="brand-subtitle">Screenshare & Staff Specialist</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" onclick="openModal('contacto')"><i class="fas fa-envelope"></i> Contacto</button>
+        <a href="https://discord.gg/5v4y3DqQ2" target="_blank" class="btn btn-primary" data-discord-link><i class="fab fa-discord"></i> Discord</a>
+      </div>
+    </header>
+
+    <main class="dashboard-grid">
+      <section class="hero-card">
+        <div>
+          <span class="badge"><i class="fas fa-shield-alt"></i> <span id="hero-badge">Minecraft PvP & Screenshare</span></span>
+          <h2 class="hero-title" id="hero-title">Hola, soy Keviin</h2>
+          <p class="hero-desc" id="hero-desc">
+            Apasionado del mundo de Minecraft PvP, con enfoque en el trabajo de staff y la detección de ventajas desleales (Screenshare). Me caracterizo por el aprendizaje continuo, la responsabilidad y el compromiso con cada comunidad.
+          </p>
+        </div>
+      </section>
+
+      <section class="cards-grid">
+        <div class="card" data-card="sobre-mi" onclick="openModal('sobre-mi')">
+          <div class="card-icon"><i class="fas fa-user-circle"></i></div>
+          <h3 class="card-title">Sobre mí</h3>
+          <p class="card-desc">Conoce más sobre mi trayectoria en el entorno de Minecraft PvP y staff.</p>
+        </div>
+
+        <div class="card" data-card="proposito" onclick="openModal('proposito')">
+          <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+          <h3 class="card-title">Propósito</h3>
+          <p class="card-desc">Mis metas y el valor que aporto a las comunidades donde participo.</p>
+        </div>
+
+        <div class="card" data-card="experiencia" onclick="openModal('experiencia')">
+          <div class="card-icon"><i class="fas fa-search-plus"></i></div>
+          <h3 class="card-title">Experiencia SS</h3>
+          <p class="card-desc">Mis rangos y participaciones en Holypvp, Vitalismc, Dynamicpvp y SSA.</p>
+        </div>
+
+        <div class="card" data-card="intereses" onclick="openModal('intereses')">
+          <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+          <h3 class="card-title">Intereses</h3>
+          <p class="card-desc">Áreas principales en las que enfoco mi tiempo y desarrollo personal.</p>
+        </div>
+
+        <div class="card" data-card="contacto" onclick="openModal('contacto')">
+          <div class="card-icon"><i class="fas fa-address-book"></i></div>
+          <h3 class="card-title">Contacto</h3>
+          <p class="card-desc">Acceso a mi correo electrónico personal y mi servidor de Discord.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p id="footer-text">&copy; 2026 Keviin. Todos los derechos reservados.</p>
+      <div style="display: flex; gap: 15px;">
+        <a href="https://discord.gg/5v4y3DqQ2" target="_blank" data-discord-link style="color: #64748b; text-decoration: none;"><i class="fab fa-discord"></i></a>
+        <a href="mailto:keviinsoficial@gmail.com" data-email-link style="color: #64748b; text-decoration: none;"><i class="fas fa-envelope"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">¡Correo copiado al portapapeles!</div>
+
+  <script src="content-defaults.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
