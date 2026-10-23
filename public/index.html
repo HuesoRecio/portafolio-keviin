@@ -81,4 +81,10 @@
   <script src="content-defaults.js"></script>
   <script src="script.js"></script>
 </body>
-</html>
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <h3 class="modal-title-box" id="modal-title">Título</h3>
+      <div id="modal-body">Contenido</div>
+    </div>
+  </div>
